@@ -1,29 +1,13 @@
 OpenAI:
   api_key: 'API_KEY'
   base_url: 'https://api.openai.com/v1'
-# Possible model values
-# gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613
-# gpt-4, gpt-4-0613, gpt-4-32k, gpt-4-32k-0613
-# Legacy models
-# text-davinci-003, text-davinci-002, code-davinci-002
-# See this link for available models
-# https://platform.openai.com/docs/models/continuous-model-upgrades
   ai_model: gpt-4
-# Local model file to use for transcription.
-# Can also be specified using the -m parameter on command line of the application
+
   local_transcripton_model_file: 'base'
-# Language in which ChatGPT should respond.
-# List of languages available for openAI is available at
-# https://platform.openai.com/docs/guides/speech-to-text/supported-languages
   response_lang: English
 
-# Request timeout for any response requests made to openAI API
   response_request_timeout_seconds: 10
-
-# Summarize request timeout for any response requests made to openAI API
   summarize_request_timeout_seconds: 30
-
-# Temperature parameter for OpenAI chat completion API
   temperature: 0.0
 
 Deepgram:
@@ -31,87 +15,69 @@ Deepgram:
 
 Together:
   api_key: 'API_KEY'
-  # Supported models are at https://docs.together.ai/docs/inference-models
   ai_model: 'mistralai/Mixtral-8x7B-Instruct-v0.1'
   base_url: 'https://api.together.xyz'
 
 WhisperCpp:
-  # Can also be specified using the -m parameter on command line of the application
   local_transcripton_model_file: 'base'
 
 General:
   log_file: 'logs/Transcribe.log'
-  # These two parameters are used together.
-  # Save LLM response to file if save_llm_response_to_file is Yes
-  save_llm_response_to_file: Yes # Possible values are Yes, No
+  save_llm_response_to_file: Yes
   llm_response_file: 'logs/response.txt'
-# Attempt transcription of the sound file after these number of seconds
   transcript_audio_duration_seconds: 3
-# These two parameters are used together.
-# Setting clear_transcript_periodically: yes will clear transcript data at a regular interval
-# clear_transcript_interval_seconds is applicable when clear_transcript_periodically is set to Yes
-  clear_transcript_periodically: No # Possible values are Yes, No
+  clear_transcript_periodically: No
   clear_transcript_interval_seconds: 90
-# Determines whether to use API for STT or not. This option is applicable only for online services.
-# This option has no affect on offline services.
-# This is equivalent to -stt (speech_to_text) argument on command line.
-# Command line argument takes precedence over value specified in parameters.yaml
   use_api: False
-# Index of microphone device. Value of -1 indicates it is not set.
-# This is equivalent to -mi (mic_device_index) argument on command line
-# Command line argument takes precedence over value specified in parameters.yaml
   mic_device_index: -1
-# Index of speaker device.  Value of -1 indicates it is not set.
-# This is equivalent to -si (speaker_device_index) argument on command line
-# Command line argument takes precedence over value specified in parameters.yaml
   speaker_device_index: -1
-# Disable Microphone
-# This is equivalent to -dm (disable_mic) argument on command line
-# Command line argument takes precedence over value specified in parameters.yaml
   disable_mic: False
-# This is equivalent to -ds (disable_speaker) argument on command line
-# Command line argument takes precedence over value specified in parameters.yaml
   disable_speaker: False
   stt: whisper
   continuous_response: True
-  # The interval at which to ping the LLM for response
   response_interval: 10
-
-# This is equivalent to -c argument on command line
-# Command line argument takes precedence over value specified in parameters.yaml
   chat_inference_provider: openai
 
+  default_prompt_preamble: "Based on the provided CV and professional experiences, respond to the following transcription."
+  default_prompt_epilogue: "Please provide a detailed response to the conversation. Give your response in square brackets."
 
-# These are used for single turn, selected text responses only.
-  default_prompt_preamble: "You are a casual pal, genuinely interested in the conversation at hand. A poor transcription of conversation is given below. "
-  default_prompt_epilogue: "Please respond, in detail, to the conversation. Confidently give a straightforward response to the speaker, even if you don't understand them. Give your response in square brackets. DO NOT ask to repeat, and DO NOT ask for clarification. Just answer the speaker directly."
-# The combination of system_prompt, initial_convo is used to create a multi turn prompt message for LLM.
-# system_prompt_1, systen_prompt_2 are here as samples of other possible prompts.
-# Only the content of system_prompt parameter will be used
-  system_prompt: "You are a casual pal, genuinely interested in the conversation at hand. Please respond, in detail, to the conversation. Confidently give a straightforward response to the speaker, even if you don't understand them. Give your response in square brackets. DO NOT ask to repeat, and DO NOT ask for clarification. Just answer the speaker directly."
-#  system_prompt: "You are an expert at Basketball and helping others learn about basketball. Please respond, in detail, to the conversation. Confidently give a straightforward response to the speaker, even if you don't understand them. Give your response in square brackets. DO NOT ask to repeat, and DO NOT ask for clarification. Just answer the speaker directly."
-#  system_prompt: "You are an expert at Fantasy Football and helping others learn about Fantasy football. Please respond, in detail, to the conversation. Confidently give a straightforward response to the speaker, even if you don't understand them. Give your response in square brackets. DO NOT ask to repeat, and DO NOT ask for clarification. Just answer the speaker directly."
-#  system_prompt: “You are an expert Agile Coach and are interviewing for a position. Respond in detail to the conversation. Confidently give a straightforward response to the speaker, even if you don't understand them. Give your response in square brackets. DO NOT ask to repeat, and DO NOT ask for clarification. Just answer the speaker directly."
+  system_prompt: |
+    You are a highly experienced IT professional named Mubeen Mohammed with over 10 years of experience in project management and business analysis. 
+    You have worked in Banking, Fintech, Healthcare, and Retail sectors, specializing in managing the full software development lifecycle (SDLC) with a strong focus on Agile/Scrum methodologies.
+    Your work experience includes roles at Genesis Infocom, Bridgeline Digital, and CL Infotech.
+    You have expertise in stakeholder management, GAP analysis, requirements gathering, and technical documentation.
+    You are proficient in data analysis tools such as Power BI and Tableau, and known for your leadership, process improvement, and team-building capabilities.
+    You have worked on key projects such as Retail Loans/Lending Application for Tata Capital Financial Services Ltd, Sales Analytics Enhancement for Otaku, Customer Insights Enhancement for Oportun, Appointment Booking & Management System for Zocdoc Healthcare Services, and Digital & Innovation initiatives for Union Bank.
+    You are also experienced as a Business Analyst, Scrum Master, and Agile Project Manager.
+    Respond to questions based strictly on the details from your CV, your project experiences, and your expertise in business analysis, scrum mastery, and agile project management. Use the information and experiences provided below:
+
+    - **Genesis Infocom (April 2020 - Present)**:
+      - Responsibilities: Project scheduling, stakeholder meetings, documentation, UI design, data mapping, requirements gathering, Scrum ceremonies, product backlog management, risk assessment, and status reporting.
+      - Achievements: Improved project delivery timelines, enhanced user experiences, streamlined data mapping processes.
+
+    - **Bridgeline Digital (Feb 2016 - March 2020)**:
+      - Responsibilities: Cross-functional team collaboration, UI mock-ups, GAP analysis, JAD sessions, product documentation, Agile methodologies, client acquisition.
+      - Achievements: Optimized development schedules, enhanced user experience, improved project documentation.
+
+    - **CL Infotech (Oct 2009 - May 2012)**:
+      - Responsibilities: Software testing, product documentation, strategic planning, user training.
+      - Achievements: Ensured client requirements were met, contributed to product roadmap, facilitated knowledge transfer.
+
+    - **Projects**:
+      - Tata Capital Financial Services Ltd.: Implemented Agile practices, enhanced application stages, streamlined KYC and credit approval processes.
+      - Otaku: Integrated sales data, applied predictive analytics, developed real-time dashboards.
+      - Oportun: Led BI tools project, utilized Power BI, improved customer satisfaction.
+      - Zocdoc Healthcare Services: Developed OCR-integrated platform, led Scrum team, refined features.
+      - Union Bank: Managed digital onboarding, improved user experience and system performance.
 
   summary_prompt: 'Create a summary of the following text'
 
-# When we anticipate to talk about a specific topic, seed the content with some conversation
-# Application expects role "You" to have 1 entry
-# If the conversation is generic, replace this text with something like this.
-#   role: You
-#   content: I am V, I want to have a casual friendly conversation
-#   role: assistant
-#   content: Hello V, That's awesome! Glad to meet you and I am looking forward to our conversation today
   initial_convo:
     first:
       role: "You"
-      # content: "I am V, I want to learn about Fantasy Football"
-      # content: "I am V, I want to learn about Basketball"
-      # content: "Hey assistant, how are you doing today, I want to talk about Agile coaching today."
-      content: Hey assistant, how are you doing today, I am in mood of a casual conversation.
+      content: "Hello assistant, how are you today? I'd like to discuss my experience in IT project management, business analysis, and my roles as a Scrum Master and Agile Project Manager."
     second:
       role: "assistant"
-      # content: "Hello, V. That's awesome! What do you want to know about basketball"
-      # content: "Hello, V. That's awesome! What do you want to know about Fantasy Football"
-      # content: "Hello, V. You are awesome. I am doing very well and looking forward to discussion about Agile coaching."
-      content: "Hello, V. You are awesome. I am doing very well and looking forward to some light hearted banter with you."
+      content: "Hello! I'm doing well, thank you. Let's talk about your experience in IT project management, business analysis, and your roles as a Scrum Master and Agile Project Manager. What specific aspect would you like to start with?"
+
+# Adjust the other settings as per your requirements.
